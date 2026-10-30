@@ -41,7 +41,7 @@
     id: 'quiz',
     title: 'חידון מסכם',
     blurb: L.keep(Q).length + ' שאלות מכל הלומדה',
-    minutes: 15,
+    minutes: L.keep(Q).length,   // כדקה לשאלה
     lede: 'שאלות מכל היחידות, בלי להריץ קוד. ההסבר נפתח אחרי כל תשובה. כדאי לקרוא אותו גם כשצדקתם.',
     build(host) {
       host.innerHTML = '<div id="qz"></div>';

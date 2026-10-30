@@ -94,7 +94,7 @@
       h += '</ol></section>';
     });
 
-    h += '<div class="home-foot"><span>זמן משוער לכל הלומדה: כ-' + Math.round(totalMin / 60 * 2) / 2 + ' שעות, אפשר בכמה ישיבות.</span>' +
+    h += '<div class="home-foot"><span>זמן משוער לכל הלומדה: כ-' + Math.round(totalMin / 60 * 2) / 2 + ' שעות.</span>' +
       '<span>ההתקדמות נשמרת בדפדפן הזה בלבד.</span>' +
       '<span id="reset-zone"><button type="button" class="btn ghost small" id="reset-btn">איפוס ההתקדמות</button></span></div>' +
       (C.basedOn ? '<p class="credit">' + C.basedOn + '.</p>' : '');
