@@ -1,0 +1,109 @@
+/* memory.css — הייצוג החזותי של הזיכרון: פס בתים, מטריצה, תור הקלט */
+
+.mem-wrap { overflow-x: auto; padding: 8px 2px 4px; max-width: 100%; }
+.mem-block { direction: ltr; text-align: left; margin: 0 0 14px; }
+.mem-block:last-child { margin-bottom: 0; }
+.mem-label {
+  font-family: var(--font-mono); font-size: .76rem; color: var(--muted);
+  margin: 0 0 22px; white-space: nowrap; letter-spacing: .02em;
+}
+.mem-label .rtl { font-family: var(--font-body); direction: rtl; unicode-bidi: isolate; }
+.mem-block.nomarks .mem-label { margin-bottom: 6px; }
+
+.mem { display: inline-flex; gap: 3px; align-items: flex-end; direction: ltr; padding-bottom: 20px; }
+.mem.noidx { padding-bottom: 0; }
+
+.b {
+  position: relative; flex: 0 0 auto;
+  width: 36px; height: 42px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--line); border-radius: 3px; background: var(--surface);
+  font-family: var(--font-mono); font-size: .9rem; font-weight: 500; color: var(--ink);
+  direction: ltr; unicode-bidi: isolate;
+  transition: background .15s, border-color .15s, transform .15s;
+}
+.mem.sm .b { width: 28px; height: 34px; font-size: .8rem; }
+.mem.lg .b { width: 48px; height: 54px; font-size: 1.15rem; }
+.b .i {
+  position: absolute; bottom: -19px; left: 50%; transform: translateX(-50%);
+  font-size: .68rem; color: var(--muted); white-space: nowrap; font-weight: 400;
+}
+.b .m {
+  position: absolute; top: -21px; left: 50%; transform: translateX(-50%);
+  font-size: .7rem; font-weight: 600; color: var(--idx); white-space: nowrap;
+}
+.b.nul     { background: var(--term-bg); border-color: var(--term); color: var(--term); font-weight: 600; }
+.b.zero    { background: var(--surface-2); color: var(--muted); border-color: var(--line-2); }
+.b.garbage { background: var(--surface-2); color: var(--muted); font-style: italic; border-style: dotted; }
+.b.oob     { border-style: dashed; border-color: var(--warn); background: var(--warn-bg); color: var(--warn); }
+.b.hit     { background: var(--idx-bg); border-color: var(--idx); }
+.b.done    { background: var(--ok-bg); border-color: var(--ok); }
+.b.bad     { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+.b.nul.done { background: var(--term-bg); border-color: var(--term); }
+.b.cur { transform: translateY(-4px); box-shadow: 0 0 0 2px var(--idx); }
+.b.space { color: var(--muted); }
+.b.ctrl { color: var(--idx); }
+
+.mem .gap { flex: 0 0 auto; width: 18px; align-self: center; text-align: center; color: var(--muted); font-family: var(--font-mono); }
+.mem .bound { flex: 0 0 auto; width: 2px; align-self: stretch; background: var(--warn); margin: 0 3px; border-radius: 1px; height: 42px; }
+
+/* legend */
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--fs-xs); color: var(--muted); margin: 8px 0 0; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend .b { width: 22px; height: 20px; font-size: .62rem; }
+
+/* scalar variable (int) */
+.var {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 2px; margin-inline-end: 12px;
+  direction: ltr;
+}
+.var .vb {
+  min-width: 52px; height: 42px; padding: 0 10px; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 3px; background: var(--surface);
+  font-family: var(--font-mono); font-weight: 600;
+}
+.var .vb.changed { background: var(--idx-bg); border-color: var(--idx); }
+.var .vn { font-family: var(--font-mono); font-size: .72rem; color: var(--muted); }
+.vars { display: flex; flex-wrap: wrap; gap: 10px; direction: ltr; margin: 4px 0 8px; }
+
+/* stdin buffer */
+.stdin { direction: ltr; text-align: left; margin: 0 0 14px; }
+.stdin .mem-label { margin-bottom: 6px; }
+.stdin .b { width: 30px; height: 36px; font-size: .85rem; }
+.stdin .b.used { background: transparent; color: var(--line); border-color: var(--line-2); text-decoration: line-through; }
+.stdin .b.taking { background: var(--idx-bg); border-color: var(--idx); }
+.stdin .b.left { border-color: var(--ink-2); }
+.stdin .empty { font-family: var(--font-mono); font-size: .8rem; color: var(--muted); }
+
+/* char matrix */
+.matrix { display: inline-flex; flex-direction: column; gap: 3px; direction: ltr; }
+.mrow { display: flex; gap: 3px; align-items: center; }
+.mrow .rl { font-family: var(--font-mono); font-size: .74rem; color: var(--muted); width: 74px; flex: 0 0 auto; }
+.mrow .rr { font-family: var(--font-mono); font-size: .72rem; color: var(--muted); padding-left: 10px; white-space: nowrap; }
+.mc {
+  width: 26px; height: 28px; flex: 0 0 auto; display: grid; place-items: center;
+  border: 1px solid var(--line); border-radius: 2px; background: var(--surface);
+  font-family: var(--font-mono); font-size: .8rem;
+}
+.mc.nul { background: var(--term-bg); border-color: var(--term); color: var(--term); }
+.mc.zero, .mc.garbage { background: var(--surface-2); color: var(--muted); border-color: var(--line-2); }
+.mc.head { border: 0; background: none; color: var(--muted); font-size: .66rem; }
+.mrow.cmp .mc:not(.head) { border-color: var(--idx); }
+.mrow.cmp .rl { color: var(--idx); font-weight: 600; }
+.mrow.swap .mc:not(.head) { background: var(--ok-bg); border-color: var(--ok); }
+.mrow.swap .rl { color: var(--ok); font-weight: 600; }
+.mrow.sorted .rl { color: var(--ok); }
+.mc.hl { background: var(--idx-bg); border-color: var(--idx); }
+
+/* ASCII ruler */
+.ruler { direction: ltr; display: grid; gap: 8px; margin: 10px 0; }
+.ruler-row { display: grid; grid-template-columns: 76px minmax(0,1fr); gap: 10px; align-items: center; }
+.ruler-row .rn { font-family: var(--font-mono); font-size: .74rem; color: var(--muted); }
+.ruler-cells { display: flex; gap: 2px; overflow-x: auto; padding-bottom: 2px; }
+.rc {
+  flex: 0 0 auto; width: 22px; height: 36px; border: 1px solid var(--line-2); border-radius: 2px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: .75rem; background: var(--surface); line-height: 1.1;
+}
+.rc small { font-size: .56rem; color: var(--muted); }
+.rc.on { background: var(--idx-bg); border-color: var(--idx); font-weight: 600; }

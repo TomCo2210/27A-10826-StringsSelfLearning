@@ -1,0 +1,91 @@
+/* ════════════════════════════════════════════════════════════
+   tokens.css — צבעים, גופנים ומידות. כל שאר הקבצים משתמשים רק בהם.
+   Layout: sticky top bar · units sidebar on the right (RTL) · one unit per view
+   Signature color: --term (violet) is reserved for the '\0' terminator only.
+   ════════════════════════════════════════════════════════════ */
+:root {
+  /* surfaces — cool blue-grey "memory map" paper */
+  --paper:     #EDF1F4;
+  --paper-2:   #E2E8ED;
+  --surface:   #FFFFFF;
+  --surface-2: #F4F7F9;
+  --grid:      rgba(20, 34, 48, .05);
+
+  /* ink */
+  --ink:   #142230;
+  --ink-2: #394959;
+  --muted: #677685;
+  --line:  #C8D2DB;
+  --line-2:#E0E6EB;
+
+  /* semantic */
+  --term:    #7A2EC2;  --term-bg: #F1E7FB;   /* '\0' */
+  --idx:     #0A7570;  --idx-bg:  #DCF0EE;   /* index / cursor / current */
+  --warn:    #955500;  --warn-bg: #FAEEDA;   /* out of bounds, undefined */
+  --ok:      #2C7445;  --ok-bg:   #E2F1E7;
+  --bad:     #AD3236;  --bad-bg:  #FAE5E5;
+  --accent:  #0A7570;
+
+  /* code */
+  --code-bg:  #13202C;
+  --code-fg:  #D6DFE7;
+  --code-hi:  #213449;
+  --code-num: #5A6D80;
+  --tk-kw:  #86C4EF;
+  --tk-str: #F0B178;
+  --tk-chr: #F0B178;
+  --tk-com: #7B8EA2;
+  --tk-num: #C7A7F3;
+  --tk-fn:  #8DDBB6;
+  --tk-pp:  #EF99B5;
+  --tk-term:#E3A4FF;
+  --out-fg: #9BE3C0;
+
+  /* type */
+  --font-display: 'Secular One', 'IBM Plex Sans Hebrew', 'Arial Hebrew', Arial, sans-serif;
+  --font-body: 'IBM Plex Sans Hebrew', 'Segoe UI', 'Arial Hebrew', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --fs-xs: .78rem;
+  --fs-sm: .875rem;
+  --fs-md: 1rem;
+  --fs-lg: 1.125rem;
+  --fs-xl: 1.5rem;
+  --fs-2xl: clamp(1.7rem, 3.2vw, 2.25rem);
+  --fs-hero: clamp(2.4rem, 6.5vw, 4.3rem);
+
+  /* shape */
+  --r-sm: 4px;
+  --r: 8px;
+  --side-w: 288px;
+  --top-h: 56px;
+  --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:#0E151C; --paper-2:#151F28; --surface:#17222D; --surface-2:#1C2935; --grid: rgba(255,255,255,.035);
+    --ink:#E3E9EF; --ink-2:#B5C2CE; --muted:#8696A5; --line:#2C3B49; --line-2:#22303D;
+    --term:#C68BF6; --term-bg:#2D1D42;
+    --idx:#4FC6BD;  --idx-bg:#12332F;
+    --warn:#E1A447; --warn-bg:#37290F;
+    --ok:#6BC788;   --ok-bg:#15301E;
+    --bad:#EF898B;  --bad-bg:#3A1A1C;
+    --accent:#4FC6BD;
+    --code-bg:#0A1118; --code-hi:#1B2B3C; --code-num:#4C5E70;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper:#0E151C; --paper-2:#151F28; --surface:#17222D; --surface-2:#1C2935; --grid: rgba(255,255,255,.035);
+  --ink:#E3E9EF; --ink-2:#B5C2CE; --muted:#8696A5; --line:#2C3B49; --line-2:#22303D;
+  --term:#C68BF6; --term-bg:#2D1D42;
+  --idx:#4FC6BD;  --idx-bg:#12332F;
+  --warn:#E1A447; --warn-bg:#37290F;
+  --ok:#6BC788;   --ok-bg:#15301E;
+  --bad:#EF898B;  --bad-bg:#3A1A1C;
+  --accent:#4FC6BD;
+  --code-bg:#0A1118; --code-hi:#1B2B3C; --code-num:#4C5E70;
+  color-scheme: dark;
+}

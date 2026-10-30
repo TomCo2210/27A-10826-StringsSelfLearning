@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>לומדת מחרוזות ב-C</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans+Hebrew:wght@300;400;500;600;700&amp;family=Secular+One&amp;display=swap">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/memory.css">
+</head>
+<body>
+<a class="skip" href="#main">דילוג לתוכן</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <button class="menu-btn" id="menu-btn" type="button" aria-controls="side" aria-expanded="false">יחידות</button>
+    <a class="brand" href="#home">
+      <span class="brand-mark" aria-hidden="true">\0</span>
+      <span class="brand-name">מחרוזות ב-C</span>
+      <span class="brand-course" id="brand-course"></span>
+    </a>
+    <div class="top-progress" id="top-progress" aria-live="polite"></div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="side" id="side" aria-label="יחידות הלומדה"></nav>
+  <main id="main" tabindex="-1">
+    <noscript><p class="noscript">הלומדה דורשת JavaScript. יש לפתוח אותה בדפדפן שבו JavaScript מופעל.</p></noscript>
+  </main>
+</div>
+<div class="scrim" id="scrim" hidden></div>
+
+<!-- הגדרות הקורס וסדר היחידות -->
+<script src="js/config.js"></script>
+
+<!-- מנוע משותף -->
+<script src="js/core/util.js"></script>
+<script src="js/core/highlight.js"></script>
+<script src="js/core/memory.js"></script>
+<script src="js/core/widgets.js"></script>
+<script src="js/core/player.js"></script>
+<script src="js/core/progress.js"></script>
+<script src="js/core/quiz.js"></script>
+
+<!-- יחידות התוכן: קובץ לכל יחידה. הסדר בתפריט נקבע ב-config.js -->
+<script src="js/units/01-what.js"></script>
+<script src="js/units/02-chars.js"></script>
+<script src="js/units/03-traverse.js"></script>
+<script src="js/units/04-print.js"></script>
+<script src="js/units/05-input.js"></script>
+<script src="js/units/06-functions.js"></script>
+<script src="js/units/07-string-h.js"></script>
+<script src="js/units/08-strtok.js"></script>
+<script src="js/units/09-ctype.js"></script>
+<script src="js/units/10-format.js"></script>
+<script src="js/units/11-matrix.js"></script>
+<script src="js/units/12-pointers.js"></script>
+<script src="js/units/13-bugs.js"></script>
+<script src="js/units/14-quiz.js"></script>
+<script src="js/units/15-practice.js"></script>
+
+<!-- הרכבה וניווט -->
+<script src="js/app.js"></script>
+</body>
+</html>
