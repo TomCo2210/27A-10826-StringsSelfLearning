@@ -37,6 +37,36 @@
   L.UNITS = {};
   L.unit = def => { L.UNITS[def.id] = def; };
 
+  /* ── פרקים אופציונליים (config.include) ──
+     L.on('CTYPE')     האם הנושא כלול
+     L.has('ctype')    האם היחידה כלולה
+     L.order()         מזהי היחידות הכלולות, לפי הסדר
+     L.num('format')   מספר היחידה כפי שהוא מוצג ('10'), או null אם אינה כלולה
+     L.ref('format')   קישור "יחידה 10" ליחידה, או '' אם אינה כלולה
+     הסדר נקבע רק לפי config, כך שאפשר לקרוא לפונקציות האלה גם בזמן טעינת קובץ יחידה. */
+  const cfg = () => L.config || {};
+  L.on = flag => {
+    const inc = cfg().include || {};
+    return !(flag in inc) || inc[flag] !== false;
+  };
+  L.has = id => {
+    const fu = cfg().flagUnits || {};
+    return Object.keys(fu).every(flag => L.on(flag) || fu[flag].indexOf(id) < 0);
+  };
+  L.order = () => {
+    const out = [];
+    (cfg().parts || []).forEach(p => p.units.forEach(id => { if (L.has(id)) out.push(id); }));
+    return out;
+  };
+  L.num = id => { const i = L.order().indexOf(id); return i < 0 ? null : String(i + 1).padStart(2, '0'); };
+  L.ref = (id, before) => {
+    const n = L.num(id);
+    return n === null ? '' : (before || '') + '<a href="#' + id + '">יחידה ' + n + '</a>';
+  };
+  /* מסנן פריטים (שאלות, באגים, תרגילים) שמסומנים ב-topic של נושא שהוסתר */
+  /* כל פריט שומר את המקום המקורי שלו (_k), כדי שתשובות שמורות יישארו צמודות לשאלה הנכונה גם כשחלק מהשאלות מוסתרות */
+  L.keep = list => list.map((x, i) => { if (x._k === undefined) x._k = i; return x; }).filter(x => !x.topic || L.on(x.topic));
+
   /* מאזין input עם השהיה קצרה */
   L.debounce = (fn, ms) => { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms || 120); }; };
 })();

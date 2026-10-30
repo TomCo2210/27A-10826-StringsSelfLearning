@@ -175,6 +175,7 @@
     ]
   },
   {
+    "topic": "CTYPE",
     "id": "capitalizeWords",
     "sig": "void capitalizeWords(char s[]);",
     "desc": "משנה את המחרוזת כך שהאות הראשונה בכל מילה תהיה גדולה, וכל שאר האותיות קטנות.",
@@ -258,19 +259,28 @@
 ];
   const TESTS = ["/* ---------- tests ---------- */", "static int fails = 0;", "#define CHECK(cond, msg) do { if (cond) printf(\"ok    %s\\n\", msg); else { printf(\"FAIL  %s\\n\", msg); fails++; } } while (0)", "", "int main(void)", "{", "    char buf[100];", "", "    CHECK(countWords(\"hello world\") == 2,        \"countWords: two words\");", "    CHECK(countWords(\"  one   two  three \") == 3, \"countWords: extra spaces\");", "    CHECK(countWords(\"\") == 0,                   \"countWords: empty\");", "    CHECK(countWords(\"    \") == 0,               \"countWords: only spaces\");", "", "    CHECK(isPalindrome(\"abba\") == 1,   \"isPalindrome: abba\");", "    CHECK(isPalindrome(\"racecar\") == 1,\"isPalindrome: racecar\");", "    CHECK(isPalindrome(\"abca\") == 0,   \"isPalindrome: abca\");", "    CHECK(isPalindrome(\"a\") == 1,      \"isPalindrome: one char\");", "    CHECK(isPalindrome(\"\") == 1,       \"isPalindrome: empty\");", "", "    strcpy(buf, \"hello\"); reverse(buf); CHECK(strcmp(buf, \"olleh\") == 0, \"reverse: odd length\");", "    strcpy(buf, \"abcd\");  reverse(buf); CHECK(strcmp(buf, \"dcba\") == 0,  \"reverse: even length\");", "    strcpy(buf, \"\");      reverse(buf); CHECK(strcmp(buf, \"\") == 0,      \"reverse: empty\");", "", "    strcpy(buf, \"banana\"); removeChar(buf, 'a'); CHECK(strcmp(buf, \"bnn\") == 0,   \"removeChar: banana a\");", "    strcpy(buf, \"aaa\");    removeChar(buf, 'a'); CHECK(strcmp(buf, \"\") == 0,      \"removeChar: all removed\");", "    strcpy(buf, \"hello\");  removeChar(buf, 'z'); CHECK(strcmp(buf, \"hello\") == 0, \"removeChar: none\");", "", "    strcpy(buf, \"hELLO wORLD\"); capitalizeWords(buf); CHECK(strcmp(buf, \"Hello World\") == 0, \"capitalizeWords: basic\");", "    strcpy(buf, \" c is  FUN\");  capitalizeWords(buf); CHECK(strcmp(buf, \" C Is  Fun\") == 0,  \"capitalizeWords: spaces\");", "", "    CHECK(longestWord(\"the quick brown fox\", buf) == 5 && strcmp(buf, \"quick\") == 0, \"longestWord: first of equals\");", "    CHECK(longestWord(\"  hi   there  \", buf) == 5 && strcmp(buf, \"there\") == 0,      \"longestWord: spaces\");", "    CHECK(longestWord(\"\", buf) == 0 && strcmp(buf, \"\") == 0,                         \"longestWord: empty\");", "    CHECK(longestWord(\"   \", buf) == 0 && strcmp(buf, \"\") == 0,                      \"longestWord: only spaces\");", "", "    printf(fails ? \"\\n%d test(s) failed\\n\" : \"\\nall tests passed\\n\", fails);", "    return fails != 0;", "}"];
 
+  /* תרגיל שמסומן ב-topic של נושא מוסתר יוצא מהרשימה, וגם השורות שלו בתוכנית הבדיקה */
+  const KEPT = L.keep(EX);
+  const dropped = EX.filter(e => KEPT.indexOf(e) < 0).map(e => e.id);
+  const KEPT_TESTS = TESTS
+    .filter(line => dropped.every(id => line.indexOf(id + '(') < 0))
+    .filter((line, i, a) => !(line === '' && a[i - 1] === ''));
+  const COUNT = ['אפס', 'אחת', 'שתיים', 'שלוש', 'ארבע', 'חמש', 'שש', 'שבע', 'שמונה'][KEPT.length] || String(KEPT.length);
+  const COUNT_FN = KEPT.length === 2 ? 'שתי' : COUNT;
+
   L.unit({
     id: 'practice',
     title: 'תרגילי כתיבה',
-    blurb: 'שש פונקציות לכתוב בעצמכם, עם רמזים ובדיקות',
+    blurb: COUNT_FN + ' פונקציות לכתוב בעצמכם, עם רמזים ובדיקות',
     minutes: 60,
-    lede: 'שש פונקציות, מהקלה לקשה. כתבו כל אחת בעצמכם לפני שאתם פותחים רמז. את פונקציות <code>string.h</code> ו-<code>ctype.h</code> מותר להשתמש.',
+    lede: COUNT_FN + ' פונקציות, מהקלה לקשה. כתבו כל אחת בעצמכם לפני שאתם פותחים רמז. מותר להשתמש בפונקציות של <code>string.h</code>' + (L.on('CTYPE') ? ' ו-<code>ctype.h</code>' : '') + '.',
     goals: ['לכתוב פונקציות על מחרוזות מאפס, כולל מקרי הקצה: מחרוזת ריקה, רווחים כפולים, תו אחד'],
 
     build(host) {
       const show = !!L.config.showSolutions;
       host.innerHTML =
         L.note('info', 'איך לעבוד', '<ol style="margin:0"><li>קראו את החתימה ואת הדוגמאות, כולל השורה האחרונה: היא בדרך כלל מקרה הקצה.</li><li>כתבו את הפונקציה בסביבת הפיתוח, והריצו אותה עם תוכנית הבדיקה שבסוף העמוד.</li><li>נתקעתם? רמז 1 נותן כיוון, רמז 2 מתאר את הפתרון במילים.' + (show ? ' את הפתרון המלא פתחו רק אחרי שהבדיקות עוברות, כדי להשוות.' : '') + '</li></ol>') +
-        EX.map((e, i) =>
+        KEPT.map((e, i) =>
           '<h3>' + (i + 1) + ' · <code>' + e.id + '</code></h3>' +
           L.code([e.sig]) +
           '<p>' + e.desc + '</p>' +
@@ -280,8 +290,8 @@
           (show ? L.reveal('פתרון', L.code(e.sol) + L.note('warn', 'הטעות הנפוצה כאן', e.mistake), 'solution') : '')
         ).join('') +
         '<h3>תוכנית בדיקה</h3>' +
-        '<p>הדביקו את הפונקציות שלכם מעל ה-<code>main</code> הזה (עם <code>#include &lt;stdio.h&gt;</code>, <code>&lt;string.h&gt;</code> ו-<code>&lt;ctype.h&gt;</code>), והריצו. כל שורה מתחילה ב-<code>ok</code> או ב-<code>FAIL</code>. פונקציה שעוד לא כתבתם? מחקו את השורות שלה.</p>' +
-        L.code(TESTS);
+        '<p>הדביקו את הפונקציות שלכם מעל ה-<code>main</code> הזה (עם <code>#include &lt;stdio.h&gt;</code>' + (L.on('CTYPE') ? ', <code>&lt;string.h&gt;</code> ו-<code>&lt;ctype.h&gt;</code>' : ' ו-<code>&lt;string.h&gt;</code>') + '), והריצו. כל שורה מתחילה ב-<code>ok</code> או ב-<code>FAIL</code>. פונקציה שעוד לא כתבתם? מחקו את השורות שלה.</p>' +
+        L.code(KEPT_TESTS);
     }
   });
 })();

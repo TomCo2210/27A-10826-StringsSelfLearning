@@ -74,7 +74,7 @@
     goals: [
       'לעבור על מחרוזת עם מצביע מטייל',
       'להבחין בין <code>char s[] = "…"</code> לבין <code>char *p = "…"</code>',
-      'להבין מה מחזירות <code>strchr</code>, <code>strstr</code> ו-<code>strtok</code>'
+      L.on('STRTOK') ? 'להבין מה מחזירות <code>strchr</code>, <code>strstr</code> ו-<code>strtok</code>' : 'להבין מה מחזירות <code>strchr</code> ו-<code>strstr</code>'
     ],
 
     build(host) {
@@ -100,13 +100,13 @@
         [L.ic('sizeof'), '3', '8 (או 4): גודל של כתובת'],
         [L.ic('strlen'), '2', '2'],
         ['שינוי תו', '<span class="yes">מותר</span>', '<span class="no">התנהגות בלתי מוגדרת, בדרך כלל קריסה</span>'],
-        [L.ic('strcpy / strcat / strtok'), '<span class="yes">מותר</span>', '<span class="no">אסור</span>'],
+        [L.ic(L.on('STRTOK') ? 'strcpy / strcat / strtok' : 'strcpy / strcat'), '<span class="yes">מותר</span>', '<span class="no">אסור</span>'],
         ['להזיז אותו (<code>++</code>, <code>=</code>)', '<span class="no">אי אפשר</span>', '<span class="yes">אפשר</span>']
       ])}
       ${L.note('key', 'הגנה: const', 'כשמצביע מפנה למחרוזת קבועה, כתבו <code>const char *ptr = "Hi";</code>. כך כל ניסיון לכתוב דרכו ייעצר כבר בקומפילציה, במקום לקרוס בזמן ריצה.')}
 
       <h3>הפונקציות שמחזירות כתובת</h3>
-      <p><code>strchr</code>, <code>strstr</code> ו-<code>strtok</code> מחזירות מצביע לתוך המחרוזת המקורית, לא עותק. לכן אפשר להדפיס מהמקום שנמצא ועד הסוף, לחשב אינדקס בחיסור, ולהמשיך לחפש משם:</p>
+      <p><code>strchr</code>${L.on('STRTOK') ? ', <code>strstr</code> ו-<code>strtok</code>' : ' ו-<code>strstr</code>'} מחזירות מצביע לתוך המחרוזת המקורית, לא עותק. לכן אפשר להדפיס מהמקום שנמצא ועד הסוף, לחשב אינדקס בחיסור, ולהמשיך לחפש משם:</p>
       ${L.code(['char s[] = "user@afeka.ac.il";', "char *at = strchr(s, '@');", '', 'if (at != NULL)', '{', '    printf("%s\\n", at + 1);          /* afeka.ac.il */', '    printf("%d\\n", (int)(at - s));   /* 4 */', '}'])}
       <div class="lab"><p class="lab-t">כל המופעים של תת-מחרוזת</p>
         <div class="fields">

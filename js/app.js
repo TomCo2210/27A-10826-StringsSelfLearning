@@ -11,14 +11,16 @@
   document.documentElement.lang = 'he';
   document.documentElement.dir = 'rtl';
 
-  /* סדר היחידות לפי config, רק יחידות שבאמת נטענו */
-  const ORDER = [];
+  /* סדר היחידות: לפי config, בלי יחידות שהוסתרו ב-config.include.
+     חלק שכל היחידות שלו הוסתרו לא מוצג, והאותיות (א, ב, ג…) נספרות רק על החלקים המוצגים. */
+  const ORDER = L.order();
+  ORDER.forEach(id => { if (!L.UNITS[id]) console.warn('יחידה חסרה:', id); });
+  const PARTS = C.parts
+    .map(p => Object.assign({}, p, { units: p.units.filter(id => L.has(id) && L.UNITS[id]) }))
+    .filter(p => p.units.length);
   const PART_OF = {};
-  C.parts.forEach((p, pi) => p.units.forEach(id => {
-    if (L.UNITS[id]) { ORDER.push(id); PART_OF[id] = pi; }
-    else console.warn('יחידה חסרה:', id);
-  }));
-  const num = id => String(ORDER.indexOf(id) + 1).padStart(2, '0');
+  PARTS.forEach((p, pi) => p.units.forEach(id => { PART_OF[id] = pi; }));
+  const num = id => L.num(id);
   const PART_LETTERS = 'אבגדהוזחט';
 
   const side = L.$('#side'), main = L.$('#main'), menuBtn = L.$('#menu-btn'), scrim = L.$('#scrim');
@@ -39,8 +41,8 @@
   /* ── sidebar ── */
   function drawSide(cur) {
     let h = '<a class="side-home" href="#home"' + (cur === 'home' ? ' aria-current="page"' : '') + '>דף הבית ותוכן העניינים</a>';
-    C.parts.forEach((p, pi) => {
-      const ids = p.units.filter(id => L.UNITS[id]);
+    PARTS.forEach((p, pi) => {
+      const ids = p.units;
       h += '<div class="side-part"><p class="side-part-t">חלק ' + PART_LETTERS[pi] + ' · ' + p.title + '</p><ol>';
       ids.forEach(id => {
         const u = L.UNITS[id], done = P.isDone(id);
@@ -58,7 +60,7 @@
   function renderHome() {
     const last = P.last();
     const firstUndone = ORDER.find(id => !P.isDone(id));
-    const resume = last && L.UNITS[last] ? last : null;
+    const resume = last && L.UNITS[last] && ORDER.indexOf(last) >= 0 ? last : null;
     const totalMin = ORDER.reduce((a, id) => a + (L.UNITS[id].minutes || 0), 0);
 
     let h = '<section class="home-hero">' +
@@ -75,12 +77,13 @@
 
     h += '<div class="how">' +
       '<div><p class="h-t">מנסים, לא רק קוראים</p><p>בכל יחידה יש סימולציה: משנים קלט, מריצים צעד אחר צעד, ורואים את הזיכרון משתנה.</p></div>' +
-      '<div><p class="h-t">בודקים את עצמכם</p><p>בסוף כל יחידה כמה שאלות קצרות עם הסבר מלא. בסוף הלומדה: מצא את הבאג, חידון מסכם ותרגילי כתיבה.</p></div>' +
-      '<div><p class="h-t">לפי הסדר</p><p>יחידות 01–11 דורשות רק מערכים, מטריצות ופונקציות. יחידה 12 מניחה שלמדתם מצביעים (מפגש 8).</p></div>' +
+      '<div><p class="h-t">בודקים את עצמכם</p><p>בסוף כל יחידה כמה שאלות קצרות עם הסבר מלא.' +
+        (L.on('PRACTICE') ? ' בסוף הלומדה: מצאו את הבאג, חידון מסכם ותרגילי כתיבה.' : '') + '</p></div>' +
+      '<div><p class="h-t">לפי הסדר</p><p>' + orderNote() + '</p></div>' +
       '</div>';
 
-    C.parts.forEach((p, pi) => {
-      const ids = p.units.filter(id => L.UNITS[id]);
+    PARTS.forEach((p, pi) => {
+      const ids = p.units;
       h += '<section class="toc-part"><div class="toc-part-h"><h3>חלק ' + PART_LETTERS[pi] + ' · ' + p.title + '</h3><span class="sub">' + p.sub + '</span></div><ol class="toc-list">';
       ids.forEach(id => {
         const u = L.UNITS[id], done = P.isDone(id);
@@ -108,14 +111,23 @@
     });
   }
 
+  /* "יחידות 01–11 דורשות רק…" — מחושב מהיחידות הכלולות */
+  function orderNote() {
+    const ptr = num('pointers');
+    const before = ptr ? ORDER.slice(0, ORDER.indexOf('pointers')) : ORDER.slice();
+    let t = 'יחידות ' + num(before[0]) + '–' + num(before[before.length - 1]) + ' דורשות רק מערכים, מטריצות ופונקציות.';
+    if (ptr) t += ' יחידה ' + ptr + ' מניחה שלמדתם מצביעים (מפגש 8).';
+    return t;
+  }
+
   /* hero: המילה נכתבת תו-תו לתוך מערך, ואז מופיע '\0' */
   function heroAnim() {
     const word = 'hello', SIZE = 8;
     const host = L.$('#hero-strip'), cap = L.$('#hero-cap');
     const caps = [
-      'char s[8]; — מערך של 8 תווים. עדיין לא אותחל, ולכן יש בו זבל.',
+      '<code>char s[8];</code> מערך של 8 תווים. עדיין לא אותחל, ולכן יש בו זבל.',
       'התווים נכתבים לתאים 0 עד 4…',
-      'ובתא 5 נכתב \'\\0\'. מכאן המחשב יודע שהמחרוזת היא "hello", באורך 5.'
+      'ובתא 5 נכתב <code>\'\\0\'</code>. מכאן המחשב יודע שהמחרוזת היא <code>"hello"</code>, באורך 5.'
     ];
     let k = -1;
     function paint() {
@@ -127,7 +139,7 @@
       }
       const state = {}; for (let i = 0; i < Math.min(k, word.length); i++) state[i] = 'done';
       host.innerHTML = L.mem(bytes, { size: 'lg', state, cur: k >= 0 && k <= word.length ? k : undefined });
-      cap.textContent = k < 0 ? caps[0] : k <= word.length ? caps[1] : caps[2];
+      cap.innerHTML = k < 0 ? caps[0] : k <= word.length ? caps[1] : caps[2];
     }
     if (L.reducedMotion()) { k = word.length + 1; paint(); return; }
     paint();
@@ -149,7 +161,7 @@
 
     main.innerHTML =
       '<header class="unit-head">' +
-        '<p class="unit-kicker"><span class="k-num">' + num(id) + '</span><span>חלק ' + PART_LETTERS[pi] + ' · ' + C.parts[pi].title + '</span>' +
+        '<p class="unit-kicker"><span class="k-num">' + num(id) + '</span><span>חלק ' + PART_LETTERS[pi] + ' · ' + PARTS[pi].title + '</span>' +
         (u.minutes ? '<span class="k-time">כ-' + u.minutes + ' דקות</span>' : '') + '</p>' +
         '<h2>' + u.title + '</h2>' +
         (u.lede ? '<p class="lede">' + u.lede + '</p>' : '') +

@@ -20,9 +20,9 @@
     { title: 'מספר ואז שם',
       code: ['int id;', 'char name[30];', 'scanf("%d", &id);', 'fgets(name, sizeof(name), stdin);'],
       bug: 3, prompt: 'השם תמיד יוצא ריק. איפה?',
-      why: 'אחרי <code>scanf("%d")</code> נשאר <code>\'\\n\'</code> בתור, ו-<code>fgets</code> קוראת אותו מיד. צריך לנקות את שארית השורה בין השתיים (ראו יחידה 05).',
+      why: 'אחרי <code>scanf("%d")</code> נשאר <code>\'\\n\'</code> בתור, ו-<code>fgets</code> קוראת אותו מיד. צריך לנקות את שארית השורה בין השתיים (ראו ' + L.ref('input') + ').',
       fix: ['scanf("%d", &id);', "while ((ch = getchar()) != '\\n' && ch != EOF)", '    ;', 'fgets(name, sizeof(name), stdin);'], fixHi: [1, 2] },
-    { title: 'העתקה לאותיות גדולות',
+    { title: 'העתקה לאותיות גדולות', topic: 'CTYPE',
       code: ['void copyUpper(char dest[], const char src[])', '{', '    int i;', "    for (i = 0; src[i] != '\\0'; i++)", '        dest[i] = toupper(src[i]);', '}'],
       bug: 5, prompt: 'משהו חסר. לחצו על השורה שלפניה הוא צריך להיות.',
       why: 'הלולאה עוצרת <b>לפני</b> <code>\'\\0\'</code> ולא מעתיקה אותו. <code>dest</code> מקבל את כל האותיות, אבל אין בו סימן סוף, ולכן הוא לא מחרוזת.',
@@ -31,7 +31,7 @@
       code: ['char full[12];', 'strcpy(full, "Avigail");', 'strcat(full, " ");', 'strcat(full, "Ben-David");'],
       bug: [0, 3], why: 'אחרי שתי השורות הראשונות יש ב-<code>full</code> 8 תווים. הוספה של 9 תווים נותנת 17, ועוד <code>\'\\0\'</code>: 18 בתים במערך של 12. צריך מערך גדול יותר, או לבדוק לפני השרשור.',
       fix: ['char full[30];', '/* ... */', 'if (strlen(full) + strlen(last) + 1 <= sizeof(full))', '    strcat(full, last);'], fixHi: [0, 2] },
-    { title: 'המרה לאותיות קטנות',
+    { title: 'המרה לאותיות קטנות', topic: 'CTYPE',
       code: ["for (i = 0; s[i] != '\\0'; i++)", '    tolower(s[i]);'],
       bug: 1, why: '<code>tolower</code> מחזירה את התו החדש, ולא משנה את מה שקיבלה. התוצאה נזרקת, והמחרוזת לא משתנה.',
       fix: ["for (i = 0; s[i] != '\\0'; i++)", '    s[i] = tolower(s[i]);'], fixHi: 1 },
@@ -52,13 +52,13 @@
   L.unit({
     id: 'bugs',
     title: 'מצאו את הבאג',
-    blurb: 'עשרה קטעים קצרים, באג אחד בכל אחד',
+    blurb: L.keep(BUGS).length + ' קטעים קצרים, באג אחד בכל אחד',
     minutes: 15,
     lede: 'אלה הבאגים שמופיעים שוב ושוב בתרגילים ובמבחנים. בכל קטע יש באג אחד. לחצו על השורה הבעייתית; אחר כך יופיעו ההסבר והגרסה המתוקנת.',
-    goals: ['לזהות במהירות את עשרת הבאגים הנפוצים ביותר עם מחרוזות'],
+    goals: ['לזהות במהירות את הבאגים הנפוצים ביותר עם מחרוזות'],
     build(host) {
       host.innerHTML = '<div id="bh"></div>';
-      L.bugHunt(host.querySelector('#bh'), BUGS, { id: 'bugs' });
+      L.bugHunt(host.querySelector('#bh'), L.keep(BUGS), { id: 'bugs' });
     }
   });
 })();

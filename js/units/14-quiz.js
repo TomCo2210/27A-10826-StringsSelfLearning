@@ -24,28 +24,28 @@
       opts: [L.ic('1234'), L.ic('3412'), L.ic('46'), L.ic('34')], a: 1, why: '<code>a</code> נוסף לסוף של <code>b</code>. אלה מחרוזות, לא מספרים.' },
     { q: 'האם הקוד תקין?', code: ['char d[3];', 'strcpy(d, "ab");'],
       opts: ['כן, בדיוק נכנס', 'לא, צריך d[2]', 'לא, צריך d[4]', 'לא, strcpy לא עובדת עם מחרוזת קבועה'], a: 0, why: 'שני תווים ועוד <code>\'\\0\'</code>: 3 בתים.' },
-    { q: 'מה תחזיר הקריאה?', code: ['int x, y;', 'int r = sscanf("7,8", "%d %d", &x, &y);'], opts: ['2', '1', '0', '-1'], a: 1,
+    { topic: 'SPRINTF_SSCANF', q: 'מה תחזיר הקריאה?', code: ['int x, y;', 'int r = sscanf("7,8", "%d %d", &x, &y);'], opts: ['2', '1', '0', '-1'], a: 1,
       why: 'ההמרה הראשונה קוראת 7. הפסיק אינו רווח ואינו ספרה, ולכן ההמרה השנייה נכשלת. הפורמט הנכון כאן: <code>"%d,%d"</code>.' },
-    { q: 'כמה פעמים ירוץ גוף הלולאה?', code: ['char s[] = ",a,,b,";', 'char *w = strtok(s, ",");', 'while (w != NULL)', '{', '    puts(w);', '    w = strtok(NULL, ",");', '}'],
+    { topic: 'STRTOK', q: 'כמה פעמים ירוץ גוף הלולאה?', code: ['char s[] = ",a,,b,";', 'char *w = strtok(s, ",");', 'while (w != NULL)', '{', '    puts(w);', '    w = strtok(NULL, ",");', '}'],
       opts: ['2', '3', '4', '5'], a: 0, why: '<code>strtok</code> מדלגת על מפרידים בהתחלה, בסוף ורצופים. יש שתי מילים: <code>a</code> ו-<code>b</code>.' },
-    { q: 'על איזו מההגדרות מותר להפעיל <code>strtok</code>?',
+    { topic: 'STRTOK', q: 'על איזו מההגדרות מותר להפעיל <code>strtok</code>?',
       opts: [L.ic('char s[] = "a b c";'), L.ic('char *s = "a b c";'), L.ic('const char *s = "a b c";'), 'על כולן'], a: 0,
       why: '<code>strtok</code> כותבת לתוך המחרוזת. רק המערך ניתן לכתיבה.' },
     { q: 'פונקציה צריכה לבנות מחרוזת חדשה ולתת אותה לקורא. מה החתימה המקובלת?',
       opts: [L.ic('char[] build(int n)'), L.ic('void build(char out[], int n)'), L.ic('char build(int n)'), L.ic('void build(int n, char out)')], a: 1,
       why: 'הקורא מקצה את המערך ומעביר אותו. הפונקציה כותבת לתוכו.' },
-    { q: 'מה מחזירה <code>isupper(\'a\')</code>?', opts: ['0', '1', "'A'", '-1'], a: 0, why: "<code>'a'</code> אינה אות גדולה. את ההמרה עושה <code>toupper</code>." }
+    { topic: 'CTYPE', q: 'מה מחזירה <code>isupper(\'a\')</code>?', opts: ['0', '1', "'A'", '-1'], a: 0, why: "<code>'a'</code> אינה אות גדולה. את ההמרה עושה <code>toupper</code>." }
   ];
 
   L.unit({
     id: 'quiz',
     title: 'חידון מסכם',
-    blurb: Q.length + ' שאלות מכל הלומדה',
+    blurb: L.keep(Q).length + ' שאלות מכל הלומדה',
     minutes: 15,
     lede: 'שאלות מכל היחידות, בלי להריץ קוד. ההסבר נפתח אחרי כל תשובה. כדאי לקרוא אותו גם כשצדקתם.',
     build(host) {
       host.innerHTML = '<div id="qz"></div>';
-      L.quiz(host.querySelector('#qz'), Q, { id: 'final', title: 'חידון מסכם' });
+      L.quiz(host.querySelector('#qz'), L.keep(Q), { id: 'final', title: 'חידון מסכם' });
     }
   });
 })();

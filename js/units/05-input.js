@@ -200,8 +200,8 @@ Aborted (core dumped)</span></div>
       ])}
       ${L.note('key', 'המסקנה', 'אזהרה היא לא "בסדר". כשהקומפיילר אומר שהוא לא מכיר פונקציה, הוא ממשיך על סמך ניחוש, והעובדה שהתוכנית רצה לא אומרת שהיא נכונה. אותה אזהרה בדיוק תופיע כששוכחים <code>#include &lt;string.h&gt;</code> ומשתמשים ב-<code>strlen</code>: התוכנית עשויה לעבוד, אבל במקרה. בקורס: לעולם לא <code>gets</code>. תמיד <code>fgets(s, sizeof(s), stdin)</code>.')}
 
-      ${L.reveal('להעמקה: המספר בפורמט כש-<code>MAX</code> מוגדר ב-<code>#define</code>', `
-        <p>אי אפשר לכתוב <code>scanf("%MAXs", s)</code>: הפרה-פרוססור לא מחליף שמות בתוך מחרוזות, ו-<code>scanf</code> תנסה להתאים לקלט את האותיות <code>MAXs</code>. אפשר לבנות את מחרוזת הפורמט בזמן ריצה עם <code>sprintf</code> (יחידה 10):</p>
+      ${!L.on('SPRINTF_SSCANF') ? '' : L.reveal('להעמקה: המספר בפורמט כש-<code>MAX</code> מוגדר ב-<code>#define</code>', `
+        <p>אי אפשר לכתוב <code>scanf("%MAXs", s)</code>: הפרה-פרוססור לא מחליף שמות בתוך מחרוזות, ו-<code>scanf</code> תנסה להתאים לקלט את האותיות <code>MAXs</code>. אפשר לבנות את מחרוזת הפורמט בזמן ריצה עם <code>sprintf</code> (${L.ref('format')}):</p>
         ${L.code(['#define MAX 20', 'char name[MAX + 1];', 'char fmt[10];', '', 'sprintf(fmt, "%%%ds", MAX);   /* fmt is now "%20s" */', 'scanf(fmt, name);'])}
         <p><code>%%</code> כותב את התו <code>%</code> עצמו, <code>%d</code> כותב את המספר, ואחריהם <code>s</code>.</p>`, 'deep')}
       `;

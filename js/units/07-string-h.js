@@ -158,7 +158,7 @@
           const at = s.indexOf('@'), dot = s.indexOf('.ac');
           const hitAt = { [at]: 'hit' }, hitSub = {}; for (let k = dot; k < dot + 3; k++) hitSub[k] = 'hit';
           el.innerHTML =
-            '<p>שתי הפונקציות מחזירות <b>את המקום</b> של מה שנמצא, ולא אינדקס. ביחידה 12 נבין מה זה בדיוק. בינתיים זו התבנית: שומרים את התוצאה, בודקים שאינה <code>NULL</code>, ומחסרים ממנה את שם המחרוזת כדי לקבל אינדקס.</p>' +
+            '<p>שתי הפונקציות מחזירות <b>את המקום</b> של מה שנמצא, ולא אינדקס. ' + L.ref('pointers', 'ב') + ' נבין מה זה בדיוק. בינתיים זו התבנית: שומרים את התוצאה, בודקים שאינה <code>NULL</code>, ומחסרים ממנה את שם המחרוזת כדי לקבל אינדקס.</p>' +
             L.code(['char email[] = "' + s + '";', "char *p = strchr(email, '@');", '', 'if (p != NULL)', '    printf("@ at index %d\\n", (int)(p - email));', 'else', '    printf("no @\\n");']) +
             '<div class="mem-wrap">' + L.mem(L.bytesOf(s), { size: 'sm', state: hitAt, marks: { [at]: 'p' } }) + '</div>' +
             '<div class="out">@ at index ' + at + '\n</div>' +

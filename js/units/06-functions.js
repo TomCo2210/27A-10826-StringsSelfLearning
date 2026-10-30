@@ -44,7 +44,7 @@
 
   const TRAPS = [
     { t: 'השמה של מחרוזת', code: ['char a[10] = "cat", b[10];', '', 'b = a;        /* copy? */', 'b = "dog";    /* assign? */'], bad: [2, 3],
-      why: '<b>שגיאת קומפילציה</b> בשתי השורות: <span class="mono">assignment to expression with array type</span>. אי אפשר להציב לתוך מערך שלם. הסימן <code>=</code> עם מחרוזת מותר רק <b>בשורת ההגדרה</b>, כאיתחול. כדי להעתיק משתמשים ב-<code>strcpy</code> (יחידה 07) או בלולאה.',
+      why: '<b>שגיאת קומפילציה</b> בשתי השורות: <span class="mono">assignment to expression with array type</span>. אי אפשר להציב לתוך מערך שלם. הסימן <code>=</code> עם מחרוזת מותר רק <b>בשורת ההגדרה</b>, כאיתחול. כדי להעתיק משתמשים ב-<code>strcpy</code> (' + L.ref('string-h') + ') או בלולאה.',
       fix: ['strcpy(b, a);', 'strcpy(b, "dog");'] },
     { t: 'השוואה של מחרוזות', code: ['char a[] = "cat", b[] = "cat";', '', 'if (a == b)', '    printf("same\\n");'], bad: [2],
       why: 'הקוד מתקמפל, אבל <code>==</code> בין שני מערכים משווה את <b>המקומות שלהם בזיכרון</b>, לא את התוכן. שני מערכים שונים נמצאים תמיד במקומות שונים, ולכן התנאי שקרי גם כשהתוכן זהה. משווים עם <code>strcmp</code>, שמחזירה 0 כשהמחרוזות שוות.',

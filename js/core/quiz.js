@@ -15,7 +15,7 @@
 
   L.quiz = function (host, qs, o) {
     o = o || {};
-    const key = i => 'q:' + o.id + ':' + i;
+    const key = i => 'q:' + o.id + ':' + (qs[i]._k !== undefined ? qs[i]._k : i);
 
     function render() {
       host.innerHTML =
@@ -63,7 +63,7 @@
 
   L.bugHunt = function (host, items, o) {
     o = o || {};
-    const key = i => 'b:' + o.id + ':' + i;
+    const key = i => 'b:' + o.id + ':' + (items[i]._k !== undefined ? items[i]._k : i);
     const bugsOf = it => new Set(Array.isArray(it.bug) ? it.bug : [it.bug]);
 
     function render() {

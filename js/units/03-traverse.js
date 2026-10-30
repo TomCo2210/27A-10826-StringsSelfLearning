@@ -82,7 +82,7 @@
       if (end) break;
       F.push({ line: 4, stage: L.mem(bytes, { cur: i + 1, marks: { [i + 1]: 'len=' + (i + 1) }, state: stOf(i + 1) }) + vars(i + 1, true), note: '<code>len++</code>' });
     }
-    F.push({ line: 5, out: w.length + '\n', stage: L.mem(bytes, { state: stOf(w.length) }) + vars(w.length), note: 'זה בדיוק מה ש-<code>strlen</code> עושה. ביחידה 07 נשתמש בה במקום לכתוב את הלולאה.' });
+    F.push({ line: 5, out: w.length + '\n', stage: L.mem(bytes, { state: stOf(w.length) }) + vars(w.length), note: 'זה בדיוק מה ש-<code>strlen</code> עושה. ' + L.ref('string-h', 'ב') + ' נשתמש בה במקום לכתוב את הלולאה.' });
     return { code, frames: F };
   }
 
@@ -143,7 +143,7 @@
         '/* in main: */',
         'printf("%d\\n", countChar("banana", \'a\'));   /* 3 */'
       ])}
-      <p>המילה <code>const</code> אומרת שהפונקציה מתחייבת לא לשנות את המחרוזת. נרחיב עליה ביחידה 06.</p>
+      <p>המילה <code>const</code> אומרת שהפונקציה מתחייבת לא לשנות את המחרוזת. נרחיב עליה ${L.ref('functions', 'ב')}.</p>
       ${L.note('warn', 'לא בתנאי של הלולאה', '<code>for (i = 0; i &lt; strlen(s); i++)</code> עובד, אבל <code>strlen</code> רצה על כל המחרוזת <b>בכל סיבוב</b> כדי לחשב את האורך מחדש. במחרוזת של 1,000 תווים זה מיליון בדיקות במקום אלף. אם צריך את האורך, חשבו אותו פעם אחת לפני הלולאה: <code>int len = strlen(s);</code>')}
       `;
 

@@ -85,7 +85,7 @@
             return '<div class="ruler-row"><span class="rn">' + r.name + '</span><div class="ruler-cells">' + cells + '</div></div>';
           }).join('') + '</div>' +
           L.table(['ביטוי', 'כמספר (%d)', 'כתו (%c)', ''], rows) +
-          '<p class="muted" style="font-size:var(--fs-sm)">הבדיקה <code>c &gt;= \'a\' &amp;&amp; c &lt;= \'z\'</code> מחזירה כאן <b class="mono">' + (isL ? 1 : 0) + '</b>. ביחידה 09 נראה פונקציות מוכנות לבדיקות כאלה.</p>';
+          '<p class="muted" style="font-size:var(--fs-sm)">הבדיקה <code>c &gt;= \'a\' &amp;&amp; c &lt;= \'z\'</code> מחזירה כאן <b class="mono">' + (isL ? 1 : 0) + '</b>.' + (L.has('ctype') ? ' ' + L.ref('ctype', 'ב') + ' נראה פונקציות מוכנות לבדיקות כאלה.' : '') + '</p>';
       }
       inp.addEventListener('input', render);
       host.querySelector('#c-quick').addEventListener('click', e => {
