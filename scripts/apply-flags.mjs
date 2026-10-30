@@ -44,6 +44,10 @@ for (const flag of FLAGS) {
 }
 writeFileSync(cfgPath, cfg);
 
+/* flags.json נקרא בזמן ריצה על ידי js/core/loader.js, בלי מטמון.
+   ה-config.js המעודכן נשאר כגיבוי למקרה שהקובץ לא נטען. */
+writeFileSync(`${OUT}/flags.json`, JSON.stringify(Object.fromEntries(rows.map(r => [r.flag, r.value])), null, 2) + '\n');
+
 console.table(rows);
 if (process.env.GITHUB_STEP_SUMMARY) {
   const md = ['### פרקים בלומדה', '', '| Secret | כלול | מקור |', '|---|---|---|',

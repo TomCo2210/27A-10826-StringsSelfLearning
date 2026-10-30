@@ -28,6 +28,7 @@ strings-lomda/
 ├── js/
 │   ├── config.js         ← פרטי הקורס, סדר היחידות, פרקים כלולים, הצגת פתרונות
 │   ├── core/             ← מנוע משותף, בלי תוכן
+│   │   ├── loader.js     ← קורא את flags.json ורק אז מריץ את היחידות
 │   │   ├── util.js       ← עזרים + רישום יחידות (L.unit)
 │   │   ├── highlight.js  ← צביעת קוד C ובלוק קוד (L.code)
 │   │   ├── memory.js     ← ציור הזיכרון (L.mem)
@@ -79,7 +80,9 @@ strings-lomda/
 1. בריפו: Settings → Secrets and variables → Actions.
 2. בלשונית Secrets, ליד ה-Secret: עריכה (העיפרון), ולכתוב `true` או `false`.
 3. שינוי של Secret לא מפעיל פריסה מחדש לבד: Actions → Deploy to GitHub Pages → Run workflow.
-4. אחרי דקה-שתיים האתר מתעדכן. בסיכום של הריצה (Summary) יש טבלה של הערכים שהופעלו.
+4. כשהריצה מסתיימת (בערך דקה), הערכים החדשים מופיעים בטעינה הבאה של העמוד. בסיכום של הריצה (Summary) יש טבלה של הערכים שהופעלו.
+
+איך זה עובד: ה-workflow כותב קובץ `flags.json` לפי ה-Secrets, והעמוד קורא אותו בכל טעינה בלי מטמון (`js/core/loader.js`). לכן אין צורך לנקות מטמון בדפדפן. אם הקובץ לא נטען (פתיחה מהדיסק, עותק במודל), העמוד משתמש בערכים שב-`js/config.js`.
 
 ערך ריק או Secret שנמחק = ברירת המחדל שב-`js/config.js`. ערך אחר מ-true/false מכשיל את הריצה עם הודעת שגיאה, והאתר הקודם נשאר באוויר.
 אפשר להגדיר אותם גם כ-Variables (באותו מסך, לשונית Variables), ואז רואים את הערך הנוכחי בלי לפתוח עריכה. אם יש גם Secret וגם Variable באותו שם, ה-Secret קובע.
@@ -117,7 +120,7 @@ strings-lomda/
 })();
 ```
 
-2. להוסיף `<script src="js/units/16-<name>.js"></script>` ב-`index.html`, לפני `app.js`.
+2. להוסיף `<script type="lomda/deferred" src="js/units/16-<name>.js"></script>` ב-`index.html`, לפני השורה של `app.js`.
 3. להוסיף את ה-id לחלק המתאים ב-`config.js`.
 
 ## התקדמות הסטודנטים
