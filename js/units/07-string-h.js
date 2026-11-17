@@ -95,15 +95,16 @@
     build(host) {
       host.innerHTML = `
       ${L.code(['#include <string.h>'])}
-      ${L.table(['הפונקציה', 'מה היא עושה', 'מה מחזירה', 'בודקת מקום ביעד?'], [
-        [L.ic('strlen(s)'), 'סופרת תווים עד <code>\'\\0\'</code>', 'מספר מטיפוס <code>size_t</code>', '—'],
-        [L.ic('strcpy(dest, src)'), 'מעתיקה את <code>src</code> לתוך <code>dest</code>, כולל <code>\'\\0\'</code>', '<code>dest</code>', '<span class="no">לא</span>'],
-        [L.ic('strncpy(dest, src, n)'), 'מעתיקה לכל היותר <code>n</code> תווים', '<code>dest</code>', '<span class="maybe">חלקית</span>'],
-        [L.ic('strcat(dest, src)'), 'מוסיפה את <code>src</code> לסוף <code>dest</code>', '<code>dest</code>', '<span class="no">לא</span>'],
-        [L.ic('strcmp(a, b)'), 'משווה לפי סדר מילוני (ASCII)', 'שלילי / 0 / חיובי', '—'],
-        [L.ic('strchr(s, ch)'), 'מחפשת תו', 'מקום התו, או <code>NULL</code>', '—'],
-        [L.ic('strstr(s, sub)'), 'מחפשת תת-מחרוזת', 'מקום ההתחלה, או <code>NULL</code>', '—']
+      ${L.table(['החתימה', 'מה היא עושה', 'בודקת מקום ביעד?'], [
+        [L.ic('size_t strlen(const char* str);'), 'מחזירה את מספר התווים במחרוזת, <b>לא כולל</b> <code>\'\\0\'</code>.', '—'],
+        [L.ic('char* strcpy(char* dest, const char* src);'), 'מעתיקה את <code>src</code> אל <code>dest</code>, כולל <code>\'\\0\'</code>. מחזירה את <code>dest</code>.', '<span class="no">לא</span>'],
+        [L.ic('char* strncpy(char* dest, const char* src, size_t n);'), 'מעתיקה לכל היותר <code>n</code> תווים. מחזירה את <code>dest</code>.', '<span class="maybe">חלקית</span>'],
+        [L.ic('char* strcat(char* dest, const char* src);'), 'מוסיפה את <code>src</code> לסוף <code>dest</code> (שרשור). מחזירה את <code>dest</code>.', '<span class="no">לא</span>'],
+        [L.ic('int strcmp(const char* str1, const char* str2);'), 'משווה שתי מחרוזות לפי סדר מילוני. מחזירה <b>0</b> אם הן שוות, ערך <b>שלילי</b> אם <code>str1</code> קודמת, וערך <b>חיובי</b> אם <code>str2</code> קודמת.', '—'],
+        [L.ic('char* strchr(const char* str, int ch);'), 'מחפשת את המופע הראשון של התו <code>ch</code>. מחזירה את מקומו בזיכרון (מצביע), או <code>NULL</code> אם לא נמצא.', '—'],
+        [L.ic('char* strstr(const char* str, const char* sub);'), 'מחפשת את המופע הראשון של תת-המחרוזת <code>sub</code>. מחזירה את מקום ההתחלה שלו (מצביע), או <code>NULL</code> אם לא נמצא.', '—']
       ])}
+      <p style="font-size:var(--fs-sm);color:var(--muted)"><code>const</code> בחתימה אומר שהפונקציה לא משנה את הפרמטר הזה. <code>char*</code> בפרמטר שקול ל-<code>char[]</code>, ו-<code>char*</code> כערך מוחזר הוא מקום בזיכרון${L.has('pointers') ? ' (נבין אותו ' + L.ref('pointers', 'ב') + ')' : ''}.</p>
       <div class="lab"><p class="lab-t">הפונקציות בפעולה</p><div id="sh-tabs"></div></div>
       ${L.legend(['ch', 'nul', 'zero', 'garbage', 'oob'])}
 
@@ -122,7 +123,12 @@
         'else',
         '    printf("name too long\\n");'
       ])}
-      ${L.note('warn', 'strlen מחזירה size_t', 'הטיפוס <code>size_t</code> הוא מספר <b>לא שלילי</b>. לכן <code>strlen(a) - strlen(b)</code> לעולם לא קטן מ-0: כש-<code>a</code> קצרה יותר, יוצא מספר חיובי עצום. כדי להשוות אורכים כתבו <code>if (strlen(a) &lt; strlen(b))</code>.')}
+      ${L.note('key', 'הערך המוחזר של <code>strlen</code>',
+        L.code(['size_t strlen(const char* str);']) +
+        '<p>הערך המוחזר הוא <code>size_t</code>: שלם שאינו שלילי (unsigned), <b>לא</b> <code>int</code>.</p>' +
+        '<p>לכן הביטוי <code>strlen(a) - strlen(b)</code> על מחרוזות שונות באורכן <b>לעולם לא יהיה שלילי</b>: החישוב נעשה בטיפוס unsigned, וכש-<code>a</code> קצרה יותר יוצא מספר חיובי עצום. זה באג נפוץ מאוד.</p>' +
+        '<p>השוואה נכונה:</p>' +
+        L.code(['if (strlen(a) > strlen(b))']))}
       `;
 
       L.tabs(host.querySelector('#sh-tabs'), [

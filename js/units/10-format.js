@@ -77,6 +77,12 @@
 
     build(host) {
       host.innerHTML = `
+      ${L.table(['החתימה', 'מה היא עושה'], [
+        [L.ic('int sprintf(char* str, const char* format, ...);'), 'כמו <code>printf</code>, אבל כותבת אל המחרוזת <code>str</code> במקום למסך. מחזירה את מספר התווים שנכתבו.'],
+        [L.ic('int sscanf(const char* str, const char* format, ...);'), 'כמו <code>scanf</code>, אבל קוראת מהמחרוזת <code>str</code> במקום מהמקלדת. מחזירה את מספר השדות שנקלטו.']
+      ])}
+      <p style="font-size:var(--fs-sm);color:var(--muted)">שתיהן שייכות ל-<code>stdio.h</code> ולא ל-<code>string.h</code>, אבל הן עובדות על מחרוזות ולכן הן כאן. שלוש הנקודות (<code>...</code>) בחתימה פירושן שאפשר להעביר אחרי הפורמט כמה ערכים שרוצים, בדיוק כמו ב-<code>printf</code>.</p>
+
       <h3><code>sprintf</code>: כמו printf, אבל לתוך מערך</h3>
       <div class="lab">
         <p class="lab-t">בניית מזהה</p>

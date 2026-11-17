@@ -88,6 +88,10 @@
         <div class="fields"><label class="fld" for="pt-w">המחרוזת<input type="text" id="pt-w" value="Afeka" maxlength="10" spellcheck="false" autocomplete="off"></label></div>
         <div class="pl"></div>
       </div>
+      ${L.note('info', 'שקילות',
+        '<p>שני התנאים האלה זהים. הראשון הוא קיצור מקובל של השני, ותראו אותו הרבה:</p>' +
+        L.code(["while (*p)", "while (*p != '\\0')"]) +
+        '<p>בשפת C כל ערך שאינו 0 נחשב "אמת". ברגע שהמצביע מגיע ל-<code>\'\\0\'</code>, הביטוי <code>*p</code> הוא 0, והלולאה נעצרת מעצמה.</p>')}
 
       <h3>מערך או מצביע למחרוזת קבועה</h3>
       <p>שתי השורות נראות כמעט אותו דבר, ויוצרות שני דברים שונים:</p>

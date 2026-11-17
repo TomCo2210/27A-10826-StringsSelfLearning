@@ -119,7 +119,7 @@
       after: L.note('key', 'המספר הוא גודל המערך פחות 1', 'המספר בפורמט הוא כמה <b>תווים</b> לקרוא, ו-<code>scanf</code> מוסיפה אחריהם <code>\'\\0\'</code>. למערך בגודל N כותבים <code>%(N-1)s</code>: ל-<code>char city[6]</code> כותבים <code>%5s</code>. שימו לב ששארית המילה נשארה בתור.') },
     { label: '<code>fgets</code> · שורה שלמה', input: 'Dana Levi',
       decls: [{ name: 'line', size: 20 }],
-      code: ['char line[20];', 'int len;', '', 'fgets(line, sizeof(line), stdin);', 'printf("|%s|\\n", line);', '', '/* remove the \'\\n\' at the end, if there is one */', 'len = strlen(line);', "if (len > 0 && line[len - 1] == '\\n')", "    line[len - 1] = '\\0';", 'printf("|%s|\\n", line);'],
+      code: ['char line[20];', 'size_t len;                 /* the type strlen returns */', '', 'fgets(line, sizeof(line), stdin);', 'printf("|%s|\\n", line);', '', '/* remove the \'\\n\' at the end, if there is one */', 'len = strlen(line);', "if (len > 0 && line[len - 1] == '\\n')", "    line[len - 1] = '\\0';", 'printf("|%s|\\n", line);'],
       ops: [{ t: 'fgets', arr: 'line', line: 3 }, { t: 'printf', fmt: '|%s|\n', args: ['line'], line: 4, note: 'שימו לב לפלט: ה-<code>|</code> הסוגר ירד לשורה הבאה, כי <code>\'\\n\'</code> הוא חלק מהמחרוזת.' },
         { t: 'trim', arr: 'line', line: 9 }, { t: 'printf', fmt: '|%s|\n', args: ['line'], line: 10, note: 'עכשיו המחרוזת נקייה.' }],
       after: L.note('info', 'נסו שורה ארוכה', 'הקלידו בתיבת הקלט שורה של יותר מ-19 תווים. <code>fgets</code> תחתוך אותה ולא תגלוש, וה-<code>\'\\n\'</code> לא ייכנס למערך.') },
@@ -150,6 +150,12 @@
 
     build(host) {
       host.innerHTML = `
+      ${L.note('info', 'לפני שמתחילים: מה זה <code>stdin</code>',
+        '<p><code>stdin</code> (standard input) הוא <b>ערוץ הקלט הסטנדרטי</b> של התוכנית. כברירת מחדל זו המקלדת.</p>' +
+        '<p>כל מה שהמשתמש מקליד נכנס אליו ומחכה שם בתור, עד שפונקציית קלט קוראת אותו. מה שלא נקרא <b>נשאר</b> בתור לקריאה הבאה. זה תור הקלט (buffer) שבסימולטור.</p>' +
+        '<p><code>scanf</code> קוראת תמיד מ-<code>stdin</code>. <code>fgets</code> יודעת לקרוא גם מקבצים, ולכן הפרמטר השלישי שלה אומר <b>מאיפה</b> לקרוא. כשכותבים שם <code>stdin</code>, היא קוראת מהמקלדת. קריאה מקבצים תגיע בהמשך הקורס.</p>' +
+        '<p>ל-<code>stdin</code> יש שני ערוצים מקבילים לפלט: <code>stdout</code> (הפלט הסטנדרטי, המסך, שאליו כותבת <code>printf</code>) ו-<code>stderr</code> (ערוץ להודעות שגיאה, שגם הוא מוצג על המסך).</p>')}
+
       <div class="lab">
         <p class="lab-t">סימולטור תור הקלט</p>
         <p style="font-size:var(--fs-sm);color:var(--ink-2)">בכל תרחיש: למעלה התור, כשהתווים שכבר נקראו מחוקים והתווים שנקראים בצעד הנוכחי צבועים. למטה המערכים. אפשר לשנות את מה שהמשתמש מקליד.</p>

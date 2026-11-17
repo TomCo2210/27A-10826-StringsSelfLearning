@@ -12,7 +12,8 @@
     ['isspace', c => /[ \t\n\r\f\v]/.test(c), 'רווח, טאב, מעבר שורה'],
     ['ispunct', c => /[!-\/:-@\[-`{-~]/.test(c), 'סימן פיסוק'],
     ['isxdigit', c => /[0-9A-Fa-f]/.test(c), 'ספרה הקסדצימלית'],
-    ['isprint', c => c.charCodeAt(0) >= 32 && c.charCodeAt(0) < 127, 'ניתן להדפסה']
+    ['isprint', c => c.charCodeAt(0) >= 32 && c.charCodeAt(0) < 127, 'ניתן להדפסה'],
+    ['iscntrl', c => c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127, 'תו בקרה']
   ];
 
   L.unit({
@@ -40,6 +41,11 @@
         </div>
         <div id="ct-view"></div>
       </div>
+
+      ${L.note('info', 'מה זה <code>iscntrl</code>',
+        '<p><code>iscntrl</code> מקבלת תו אחד ובודקת האם הוא <b>תו בקרה</b>.</p>' +
+        '<p>תו בקרה הוא תו שאין לו צורה על המסך, ותפקידו לשלוט בתצוגה. למשל <code>\'\\n\'</code> (שורה חדשה), <code>\'\\r\'</code> (חזרה לתחילת השורה) ו-<code>\'\\t\'</code> (טאב). בטבלת ASCII אלה התווים 0 עד 31, ועוד התו 127. נסו את הכפתור <code>\'\\n\'</code> למעלה.</p>' +
+        '<p>היא מחזירה ערך <b>שאינו 0</b> אם התו הוא תו בקרה, ו-<b>0</b> אם לא. שימוש נפוץ: להוריד מסוף שורה שנקלטה ב-<code>fgets</code> את <code>\'\\n\'</code> ואת <code>\'\\r\'</code> (שמופיע בקבצים שנכתבו ב-Windows).</p>')}
 
       <h3>שמרו את מה ש-<code>toupper</code> מחזירה</h3>
       <p><code>toupper</code> ו-<code>tolower</code> לא משנות את המשתנה שקיבלו. הן <b>מחזירות</b> את התו המומר, ותו שאינו אות מוחזר כמו שהוא:</p>
